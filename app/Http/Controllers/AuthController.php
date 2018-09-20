@@ -11,23 +11,18 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
+
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+        // confirm that the required fields are included
+        $validator = $this->validateRegister($request->all());
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'errors' => $v->errors()
+                'errors' => $validator->errors()
             ], 422);
         }
-
-
 
         $user = User::create([
             'first_name' => $request->get('first_name'),
@@ -43,11 +38,15 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+
         $credentials = $request->only('email', 'password');
         if ($token = $this->guard()->attempt($credentials)) {
             return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
         }
-        return response()->json(['error' => 'login_error'], 401);
+        return response()->json([
+            'status' => 'error',
+            'errors' => 'There was a problem with your login attempt. Please try again'
+        ], 401);
     }
 
     public function logout()
@@ -82,5 +81,25 @@ class AuthController extends Controller
     private function guard()
     {
         return Auth::guard();
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
+    }
+
+
+    private function validateRegister($data)
+    {
+        return Validator::make($data, [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
     }
 }

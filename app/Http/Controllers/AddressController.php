@@ -10,16 +10,33 @@ use Illuminate\Http\Request;
 class AddressController extends Controller
 {
 
-    public function index()
+    public function index($type = 'physical')
     {
         // return all of the addresses with the count of contacts
-        return AddressResource::collection(Address::withCount('contacts')->get());
+        return AddressResource::collection(Address::where('address_type', $type)->withCount('contacts')->get());
     }
 
 
     public function store(Request $request)
     {
-        // save a new address after validation check
+        $validator = $this->validateAddress($request->all());
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $address = Address::create($request->all());
+
+        $data = [
+            // 'data' => AddressResource::collection($address),
+            'status' => (bool)$address,
+            'message' => $address ? 'Address Created!' : 'Error Creating Address',
+        ];
+
+        return response()->json($data);
     }
 
     public function show(Address $address)

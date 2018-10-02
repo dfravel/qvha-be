@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Address;
+use App\Models\Address;
+use App\Http\Resources\Address as AddressResource;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller
@@ -10,72 +12,41 @@ class AddressController extends Controller
 
     public function index()
     {
-        //
+        // return all of the addresses with the count of contacts
+        return AddressResource::collection(Address::withCount('contacts')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        // save a new address after validation check
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Address  $address
-     * @return \Illuminate\Http\Response
-     */
     public function show(Address $address)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Address  $address
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Address $address)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Address  $address
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Address $address)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Address  $address
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Address $address)
     {
         //
+    }
+
+
+
+    private function validateAddress($data)
+    {
+        return Validator::make($data, [
+            'address_line_1' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'zip' => 'required|string|max:255',
+
+        ]);
     }
 }

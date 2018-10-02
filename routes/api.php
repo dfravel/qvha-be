@@ -14,6 +14,8 @@ Route::prefix('auth')->group(function () {
     Route::get('refresh', 'AuthController@refresh');
 });
 
+// temporarily moving these out of the login section
+Route::apiResource('addresses', 'AddressController');
 
 Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('user', 'AuthController@user');
@@ -26,7 +28,7 @@ Route::group(['middleware' => 'jwt.verify'], function () {
     Route::post('assign-committee/{contact}', 'AssignContactToCommittee');
 
     // Resourceful Controllers
-    Route::apiResource('addresses', 'AddressController');
+
     Route::apiResource('contacts', 'ContactController');
     Route::apiResource('committees', 'CommitteeController');
     Route::apiResource('users', 'UserController');

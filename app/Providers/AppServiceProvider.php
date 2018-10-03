@@ -10,6 +10,9 @@ use App\Observers\AddressObserver;
 
 use Illuminate\Support\ServiceProvider;
 
+use App\Models\Contact;
+use App\Observers\ContactObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
 
@@ -17,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         Address::observe(AddressObserver::class);
+        Contact::observe(ContactObserver::class);
     }
 
 

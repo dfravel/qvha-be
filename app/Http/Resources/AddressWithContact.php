@@ -4,14 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Address extends JsonResource
+class AddressWithContact extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
+
     public function toArray($request)
     {
         return [
@@ -23,7 +18,9 @@ class Address extends JsonResource
             'city' => $this->city,
             'state' => $this->state,
             'zip' => $this->zip,
-            'country' => $this->country
+            'country' => $this->country,
+            'contact_count' => $this->contacts_count,
+            'contacts' => Contact::collection($this->contacts)
         ];
     }
 }

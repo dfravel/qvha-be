@@ -35,7 +35,7 @@ class Contact extends Model
 
     public function address()
     {
-        return $this->belongsTo('App\Models\Address');
+        return $this->belongsTo('App\Models\Address', 'address_id');
     }
 
 

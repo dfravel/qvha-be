@@ -16,20 +16,22 @@ Route::prefix('auth')->group(function () {
 
 // temporarily moving these out of the login section
 Route::apiResource('addresses', 'AddressController');
+Route::get('address/{address}/contacts', 'GetContactsByAddress');
+Route::apiResource('contacts', 'ContactController');
 
 Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('user', 'AuthController@user');
     Route::post('logout', 'AuthController@logout');
 
     // Single Action Controllers
-    Route::get('address/{address}/contacts', 'GetContactsByAddress');
+
     Route::get('address/{address}/dues', 'GetDuesByAddress');
     Route::get('email-list', 'GetEmailList');
     Route::post('assign-committee/{contact}', 'AssignContactToCommittee');
 
     // Resourceful Controllers
 
-    Route::apiResource('contacts', 'ContactController');
+
     Route::apiResource('committees', 'CommitteeController');
     Route::apiResource('users', 'UserController');
 });
@@ -37,7 +39,7 @@ Route::group(['middleware' => 'jwt.verify'], function () {
 
 
 // fallback route for 404
-// added a handler in app/exceptions/handler to also handle model not found exceptions
+// added a handler in app/exceptions/handler to also handle ModelNotFoundException
 Route::fallback(function () {
     return response()->json(['message' => 'Record not found'], 404);
 })->name('api.fallback.404');

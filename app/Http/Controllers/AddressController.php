@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use Log;
 use App\Http\Resources\Address as AddressResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -46,6 +47,9 @@ class AddressController extends Controller
 
     public function update(Request $request, Address $address)
     {
+
+        Log::info($request->all());
+
         $validator = $this->validateAddress($request->all());
 
         if ($validator->fails()) {
@@ -54,6 +58,16 @@ class AddressController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+
+        $address->fill($request->all())->save();
+
+        $data = [
+            'data' => new AddressResource($address),
+            'status' => (bool)$address,
+            'message' => $address ? 'Address Updated!' : 'Error Updating Address',
+        ];
+
+        return response()->json($data);
 
     }
 

@@ -34,3 +34,10 @@ Route::group(['middleware' => 'jwt.verify'], function () {
     Route::apiResource('users', 'UserController');
 });
 
+
+
+// fallback route for 404
+// added a handler in app/exceptions/handler to also handle model not found exceptions
+Route::fallback(function () {
+    return response()->json(['message' => 'Record not found'], 404);
+})->name('api.fallback.404');

@@ -19,6 +19,7 @@ Route::apiResource('addresses', 'AddressController');
 Route::get('address/{address}/contacts', 'GetContactsByAddress');
 Route::apiResource('contacts', 'ContactController');
 Route::apiResource('committees', 'CommitteeController');
+Route::apiResource('users', 'UserController');
 
 Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('user', 'AuthController@user');
@@ -30,7 +31,7 @@ Route::group(['middleware' => 'jwt.verify'], function () {
     Route::post('assign-committee', 'AssignContactToCommittee');
 
     // Resourceful Controllers
-    Route::apiResource('users', 'UserController');
+
 });
 
 

@@ -69,7 +69,6 @@ class CommitteeController extends Controller
     {
         $committee->delete();
 
-
         $data = [
             'status' => (bool)$committee,
             'message' => $committee ? 'Commitee Deleted!' : 'Error Deleting Committee',

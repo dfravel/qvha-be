@@ -5,15 +5,19 @@ namespace App\Models;
 use Carbon\Carbon;
 use Hashids;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+
+    use SoftDeletes;
 
     protected $fillable = [
         'first_name', 'last_name', 'email', 'password', 'is_admin_login', 'require_password_reset', 'hashed_id', 'is_verified', 'verification_token', 'is_first_login', 'last_login_at'
@@ -49,6 +53,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return 'hashed_id';
     }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
 
     public function getNameAttribute()
     {

@@ -18,6 +18,7 @@ class CreateCommitteeContactTable extends Migration
             $table->integer('committee_id')->default(0);
             $table->integer('contact_id')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -18,21 +18,18 @@ Route::prefix('auth')->group(function () {
 Route::apiResource('addresses', 'AddressController');
 Route::get('address/{address}/contacts', 'GetContactsByAddress');
 Route::apiResource('contacts', 'ContactController');
+Route::apiResource('committees', 'CommitteeController');
 
 Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('user', 'AuthController@user');
     Route::post('logout', 'AuthController@logout');
 
     // Single Action Controllers
-
     Route::get('address/{address}/dues', 'GetDuesByAddress');
     Route::get('email-list', 'GetEmailList');
-    Route::post('assign-committee/{contact}', 'AssignContactToCommittee');
+    Route::post('assign-committee', 'AssignContactToCommittee');
 
     // Resourceful Controllers
-
-
-    Route::apiResource('committees', 'CommitteeController');
     Route::apiResource('users', 'UserController');
 });
 

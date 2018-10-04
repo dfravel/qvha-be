@@ -48,8 +48,6 @@ class AddressController extends Controller
     public function update(Request $request, Address $address)
     {
 
-        Log::info($request->all());
-
         $validator = $this->validateAddress($request->all());
 
         if ($validator->fails()) {
@@ -74,6 +72,7 @@ class AddressController extends Controller
     public function destroy(Address $address)
     {
         $address->delete();
+        $address->contacts()->delete();
 
         $data = [
             'status' => (bool)$address,

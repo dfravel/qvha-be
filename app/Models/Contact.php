@@ -14,6 +14,7 @@ class Contact extends Model
 
     protected $fillable = [
         'hashed_id',
+        'address_id',
         'contact_type',
         'first_name',
         'last_name',
@@ -39,4 +40,8 @@ class Contact extends Model
     }
 
 
+    public function committees()
+    {
+        return $this->belongsToMany('App\Classes\Committee', 'committee_contact')->whereNull('committee_contact.deleted_at');
+    }
 }

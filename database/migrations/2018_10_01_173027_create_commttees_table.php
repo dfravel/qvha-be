@@ -13,10 +13,11 @@ class CreateCommtteesTable extends Migration
      */
     public function up()
     {
-        Schema::create('commttees', function (Blueprint $table) {
+        Schema::create('committees', function (Blueprint $table) {
             $table->increments('id');
             $table->string('committee_name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +28,6 @@ class CreateCommtteesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commttees');
+        Schema::dropIfExists('committees');
     }
 }

@@ -20,6 +20,8 @@ Route::get('address/{address}/contacts', 'GetContactsByAddress');
 Route::apiResource('contacts', 'ContactController');
 Route::apiResource('committees', 'CommitteeController');
 Route::apiResource('users', 'UserController');
+Route::post('assign-committee', 'AssignContactToCommittee');
+
 
 Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('user', 'AuthController@user');
@@ -28,7 +30,7 @@ Route::group(['middleware' => 'jwt.verify'], function () {
     // Single Action Controllers
     Route::get('address/{address}/dues', 'GetDuesByAddress');
     Route::get('email-list', 'GetEmailList');
-    Route::post('assign-committee', 'AssignContactToCommittee');
+
 
     // Resourceful Controllers
 

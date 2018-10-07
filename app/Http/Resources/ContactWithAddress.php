@@ -19,7 +19,8 @@ class ContactWithAddress extends JsonResource
             'comments' => $this->comments,
             'relationship' => $this->relationship,
             'preferred_contact_method' => $this->preferred_contact_method,
-            'address' => new Address($this->address)
+            'address' => new Address($this->address),
+            'committees' => Committee::collection($this->committees)
         ];
     }
 }

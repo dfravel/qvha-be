@@ -19,4 +19,9 @@ class Committee extends Model
 
     protected $dates = ['deleted_at'];
 
+    public function contacts()
+    {
+        return $this->belongsToMany('App\Models\Contact', 'committee_contact', 'committee_id', 'contact_id')->whereNull('committee_contact.deleted_at');
+    }
+
 }

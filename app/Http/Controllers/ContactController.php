@@ -12,7 +12,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        return ContactResource::collection(Contact::with('address')->get());
+        return ContactResource::collection(Contact::with('address')->with('committees')->get());
     }
 
 

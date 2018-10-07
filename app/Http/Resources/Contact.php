@@ -18,7 +18,8 @@ class Contact extends JsonResource
             'contact_type' => $this->contact_type,
             'comments' => $this->comments,
             'relationship' => $this->relationship,
-            'preferred_contact_method' => $this->preferred_contact_method
+            'preferred_contact_method' => $this->preferred_contact_method,
+            'committees' => Committee::collection($this->committees)
         ];
     }
 }

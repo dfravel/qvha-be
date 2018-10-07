@@ -42,6 +42,6 @@ class Contact extends Model
 
     public function committees()
     {
-        return $this->belongsToMany('App\Classes\Committee', 'committee_contact')->whereNull('committee_contact.deleted_at');
+        return $this->belongsToMany('App\Models\Committee', 'committee_contact', 'contact_id', 'committee_id')->whereNull('committee_contact.deleted_at');
     }
 }

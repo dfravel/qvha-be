@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
 
     public function index()
     {
@@ -35,7 +40,7 @@ class ContactController extends Controller
             'message' => $contact ? 'Contact Created!' : 'Error Creating Contact',
         ];
 
-        return response()->json($data);
+        return response()->json($data, 201);
     }
 
     public function show(Contact $contact)

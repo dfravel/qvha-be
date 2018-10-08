@@ -7,10 +7,39 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+
+    public function login(Request $request)
+    {
+
+        $credentials = $request->only('email', 'password');
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response([
+                'status' => 'error',
+                'error' => 'invalid.credentials',
+                'msg' => 'Invalid Credentials.'
+            ], 400);
+        }
+        return response([
+            'status' => 'success'
+        ])->header('Authorization', $token);
+
+        // $credentials = $request->only('email', 'password');
+
+        // if ($token = $this->guard()->attempt($credentials)) {
+        //     return $this->respondWithToken($token);
+        // }
+
+        // return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
 
     public function register(Request $request)
     {
@@ -36,51 +65,25 @@ class AuthController extends Controller
         return response()->json(compact('user', 'token'), 201);
     }
 
-    public function login(Request $request)
-    {
 
-        $credentials = $request->only('email', 'password');
-        if ($token = $this->guard()->attempt($credentials)) {
-            return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
-        }
-        return response()->json([
-            'status' => 'error',
-            'errors' => 'There was a problem with your login attempt. Please try again'
-        ], 401);
+
+    public function me()
+    {
+        return response()->json($this->guard()->user());
     }
+
 
     public function logout()
     {
         $this->guard()->logout();
-        return response()->json([
-            'status' => 'success',
-            'msg' => 'Logged out Successfully.'
-        ], 200);
+
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
-    public function user(Request $request)
-    {
-        $user = User::find(Auth::user()->id);
-        return response()->json([
-            'status' => 'success',
-            'data' => $user
-        ]);
-    }
 
     public function refresh()
     {
-        if ($token = $this->guard()->refresh()) {
-            return response()
-                ->json(['status' => 'successs'], 200)
-                ->header('Authorization', $token);
-        }
-        return response()->json(['error' => 'refresh_token_error'], 401);
-    }
-
-
-    private function guard()
-    {
-        return Auth::guard();
+        return $this->respondWithToken($this->guard()->refresh());
     }
 
     protected function respondWithToken($token)
@@ -88,8 +91,13 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
         ]);
+    }
+
+    public function guard()
+    {
+        return Auth::guard();
     }
 
 
